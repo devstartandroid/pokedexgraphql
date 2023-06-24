@@ -1,0 +1,32 @@
+query getPokemon($name: String!) {
+    getPokemonResponse: pokemon_v2_pokemonspecies(where: {name: {_eq: $name}}, order_by: {id: asc}) {
+        pokemons: pokemon_v2_pokemons {
+            id
+            name
+            types: pokemon_v2_pokemontypes {
+                type: pokemon_v2_type {
+                    name
+                }
+            }
+            stats: pokemon_v2_pokemonstats {
+                value: base_stat
+                stat: pokemon_v2_stat {
+                    name
+                }
+            }
+            specy: pokemon_v2_pokemonspecy {
+                evolutionChain: pokemon_v2_evolutionchain {
+                    species: pokemon_v2_pokemonspecies {
+                        pokemons: pokemon_v2_pokemons(where: {id: {_lte: 150}}) {
+                            id
+                            name
+                            pokemonSprites: pokemon_v2_pokemonsprites {
+                                sprites
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -21,14 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devstart.pokedex.R
 import com.devstart.pokedex.ui.theme.PokeDexTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppSearchBar(
     modifier: Modifier = Modifier,
@@ -71,7 +68,8 @@ fun AppSearchBar(
                     Modifier
                         .weight(1f)
                         .fillMaxWidth()
-                        .padding(start = 4.dp)) {
+                        .padding(start = 4.dp)
+                ) {
                     if (text.isEmpty()) Text(
                         label,
                         style = LocalTextStyle.current.copy(

@@ -7,22 +7,24 @@ data class StatsDataUi(
     val speed: Int
 ) {
     fun getHpPercentage(): Float {
-        val maxStat = maxOf(hp, attack, defense, speed)
-        return hp.toFloat() / maxStat.toFloat()
+        return hp.toFloat() / getMaxState().toFloat()
     }
 
     fun getAttackPercentage(): Float {
-        val maxStat = maxOf(hp, attack, defense, speed)
-        return attack.toFloat() / maxStat.toFloat()
+        return attack.toFloat() / getMaxState().toFloat()
     }
 
     fun getDefensePercentage(): Float {
-        val maxStat = maxOf(hp, attack, defense, speed)
-        return defense.toFloat() / maxStat.toFloat()
+        return defense.toFloat() / getMaxState().toFloat()
     }
 
     fun getSpeedPercentage(): Float {
-        val maxStat = maxOf(hp, attack, defense, speed)
-        return speed.toFloat() / maxStat.toFloat()
+        return speed.toFloat() / getMaxState().toFloat()
+    }
+
+    private fun getMaxState(): Int {
+        return if (maxOf(hp, attack, defense, speed) > 100) {
+            maxOf(hp, attack, defense, speed)
+        } else 100
     }
 }

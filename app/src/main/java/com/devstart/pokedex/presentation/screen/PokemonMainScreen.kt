@@ -9,16 +9,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.devstart.pokedex.presentation.dataui.TypeDataUi
 import com.devstart.pokedex.presentation.state.AppBarState
 import com.devstart.pokedex.presentation.state.PokemonDetailState
 import com.devstart.pokedex.presentation.state.PokemonListState
 import com.devstart.pokedex.ui.components.AppTopBar
+import com.devstart.pokedex.ui.navigation.AppNavigation
 import com.devstart.pokedex.ui.theme.PokeDexTheme
 
 @Composable
@@ -90,55 +87,23 @@ fun PokemonMainNavigation(
     onPokemonDetailLoaded: (String) -> Unit
 ) {
     NavHost(navController = navController, startDestination = "PokemonList") {
-        composable("PokemonList") {
-            appBarUpdate(AppBarState(withSearchField = true))
-            PokemonListScreen(
-                pokemonListState = pokemonListState,
-                onPokemonClick = {
-                    navController.navigate("PokemonDetail/${it.name}/${it.types[0].name}")
-                    onPokemonDetailLoaded(it.name)
-                }
-            )
-        }
-        composable(
-            "PokemonDetail/{pokemonName}/{pokemonType}",
-            arguments = listOf(
-                navArgument("pokemonName") {
-                    type = NavType.StringType
-                },
-                navArgument("pokemonType") {
-                    type = NavType.StringType
-                }
-            )
+
+        AppNavigation.setupNavGraph(this)
+
+        AppNavigation.pokemonListDestination(
+            navController,
+            pokemonListState,
+            onPokemonDetailLoaded
         ) {
-            val pokemonName: String? by remember {
-                mutableStateOf(
-                    it.arguments?.getString(
-                        "pokemonName"
-                    )
-                )
-            }
-
-            val pokemonType: String? by remember {
-                mutableStateOf(
-                    it.arguments?.getString(
-                        "pokemonType"
-                    )
-                )
-            }
-
-            pokemonName?.let {
-                appBarUpdate(AppBarState(withBackButton = true, title = it))
-                PokemonDetailScreen(
-                    type = TypeDataUi.valueOf(pokemonType ?: "UNKNOWN"),
-                    pokemonDetailState = pokemonDetailState,
-                    onPokemonEvolutionClick = { pokemonName ->
-                        onPokemonDetailLoaded(pokemonName)
-                    }
-                )
-            }
+            appBarUpdate(AppBarState(withSearchField = true))
         }
 
+        AppNavigation.pokemonDetailDestination(
+            pokemonDetailState,
+            onPokemonDetailLoaded
+        ) {
+            appBarUpdate(AppBarState(withBackButton = true, title = it))
+        }
     }
 }
 
